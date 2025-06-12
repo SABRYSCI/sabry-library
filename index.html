@@ -104,8 +104,9 @@
 
     <script>
         // --- Data Definitions ---
+        // === IMPORTANT: Add your real file links here ===
         const bookLinks = {
-            grade6_term1: "URL_FOR_6TH_GRADE_TERM_1_BOOK.pdf",
+            grade6_term1: "https://moebh-my.sharepoint.com/:b:/g/personal/781251907_moe_bh/EXkeSgmMUfhAn2nCGk3Ht1EB97LiLUG9ZFcS8zatQUCnFw?e=hdJbvt",
             grade6_term2: "URL_FOR_6TH_GRADE_TERM_2_BOOK.pdf",
             grade7_term1: "URL_FOR_7TH_GRADE_TERM_1_BOOK.pdf",
             grade7_term2: "URL_FOR_7TH_GRADE_TERM_2_BOOK.pdf",
@@ -114,6 +115,7 @@
             grade9_term1: "URL_FOR_9TH_GRADE_TERM_1_BOOK.pdf",
             grade9_term2: "URL_FOR_9TH_GRADE_TERM_2_BOOK.pdf"
         };
+        // You can add more link objects here for other items like powerpoints, exams, etc.
 
         const grades = [
             { name: "السادس الابتدائي", key: "grade6", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.004c-.88.064-1.732.19-2.583.382a59.9 59.9 0 0117.74-5.417c.832.124 1.633.29 2.408.482l.07.004" /></svg>`},
@@ -148,14 +150,25 @@
                 
                 if (item.type === 'book') {
                     const bookUrlKey = `${gradeKey}_${termKey}`;
-                    const bookUrl = bookLinks[bookUrlKey] || 'DEFAULT_BOOK_URL_NOT_FOUND.pdf'; // Fallback URL
-                    link = `./viewer.html?file=${encodeURIComponent(bookUrl)}`;
+                    const bookUrl = bookLinks[bookUrlKey];
+                    
+                    if (bookUrl && bookUrl.includes('sharepoint.com')) {
+                        // If it's a SharePoint link, open it directly to use SharePoint's viewer
+                        link = bookUrl;
+                    } else if (bookUrl && !bookUrl.startsWith("URL_FOR")) {
+                         // If it's another direct pdf link, use our custom viewer
+                        link = `./viewer.html?file=${encodeURIComponent(bookUrl)}`;
+                    } else {
+                        // If no valid link is provided, make it a non-clickable item for now
+                        link = '#'; 
+                    }
                 } else {
-                    // Here you can add logic for other link types if needed
+                    // Here you can add logic for other link types (powerpoints, exams, etc.)
+                    // For now, they all link to '#'
                 }
                 
                 return `
-                <a href="${link}" target="_blank" class="icon-btn flex items-center justify-start text-left w-full bg-white/50 hover:bg-white rounded-lg px-3 py-2 text-sm font-medium transition-all text-green-900 hover:text-green-700 hover:shadow-sm">
+                <a href="${link}" ${link !== '#' ? 'target="_blank"' : ''} class="icon-btn flex items-center justify-start text-left w-full bg-white/50 hover:bg-white rounded-lg px-3 py-2 text-sm font-medium transition-all text-green-900 hover:text-green-700 hover:shadow-sm ${link === '#' ? 'opacity-50 cursor-not-allowed' : ''}">
                     ${item.icon}
                     <span>${item.name}</span>
                 </a>`;
