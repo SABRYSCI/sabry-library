@@ -126,8 +126,8 @@
         const showNextPage = () => { if (pageNum < pdfDoc.numPages) { pageNum++; queueRenderPage(pageNum); } };
 
         // --- Main Execution ---
-        // A better CORS proxy is needed for many web-hosted PDFs.
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        // Using a CORS proxy to prevent cross-origin issues, especially with archive.org
+        const proxyUrl = 'https://corsproxy.io/?';
         pdfjsLib.getDocument(proxyUrl + pdfUrl).promise.then(pdfDoc_ => {
             pdfDoc = pdfDoc_;
             pageCountSpan.textContent = pdfDoc.numPages;
