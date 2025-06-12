@@ -106,7 +106,7 @@
         // --- Data Definitions ---
         // === IMPORTANT: Add your real file links here ===
         const bookLinks = {
-            grade6_term1: "https://archive.org/embed/6bf1_20250612",
+            grade6_term1: "https://archive.org/download/6bf1_20250612/%D8%A7%D9%84%D9%83%D8%AA%D8%A7%D8%A8%20%D8%A7%D9%84%D9%85%D8%AF%D8%B1%D8%B3%D9%8A%206%D8%A8%20%D9%811.pdf",
             grade6_term2: "URL_FOR_6TH_GRADE_TERM_2_BOOK.pdf",
             grade7_term1: "URL_FOR_7TH_GRADE_TERM_1_BOOK.pdf",
             grade7_term2: "URL_FOR_7TH_GRADE_TERM_2_BOOK.pdf",
@@ -152,7 +152,10 @@
                     const bookUrlKey = `${gradeKey}_${termKey}`;
                     const bookUrl = bookLinks[bookUrlKey];
 
-                    if (bookUrl && !bookUrl.startsWith("URL_FOR")) {
+                    if (bookUrl && bookUrl.toLowerCase().endsWith('.pdf')) {
+                         action = `target="_blank"`;
+                         link = `./viewer.html?file=${encodeURIComponent(bookUrl)}`;
+                    } else if (bookUrl && !bookUrl.startsWith("URL_FOR")) {
                          action = `target="_blank"`;
                          link = bookUrl;
                     }
@@ -212,7 +215,6 @@
         };
 
         const playHoverSound = () => {
-            // Eagerly initialize audio context on first hover, as a fallback.
             if (!audioCtx) initAudio();
             if (isMuted || !audioCtx) return;
 
@@ -242,7 +244,6 @@
         const addEventListenersToButtons = () => {
             document.querySelectorAll('.icon-btn').forEach(b => {
                 b.addEventListener('mouseover', playHoverSound);
-                // On mobile, the first touch on a button will also trigger the sound.
                 b.addEventListener('touchstart', playHoverSound, { passive: true });
             });
             document.querySelectorAll('.semester-btn').forEach(b => {
@@ -267,7 +268,6 @@
             const unmutedIcon = document.getElementById('unmutedIcon');
             const mutedIcon = document.getElementById('mutedIcon');
 
-            // Initialize Audio on the first user interaction anywhere on the page.
             document.body.addEventListener('click', initAudio, { once: true });
             document.body.addEventListener('touchstart', initAudio, { once: true });
 
