@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عارض الكتاب المدرسي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- PDF.js library from Mozilla -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        #pdf-render {
+            border: 1px solid #e2e8f0; /* slate-200 */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            max-width: 900px;
+            margin: auto;
+        }
+        .ai-search-gradient {
+            background: linear-gradient(to right, #10b981, #06b6d4);
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md p-4 text-center z-10">
+        <h1 class="text-2xl font-bold text-gray-800">الكتاب المدرسي</h1>
+    </header>
+
+    <!-- Controls -->
+    <div class="bg-gray-100 p-2 flex justify-center items-center gap-4 sticky top-0 z-10 flex-wrap shadow-sm">
+        <button id="prev-page" class="bg-gray-700 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-lg transition disabled:opacity-50" disabled>الصفحة السابقة</button>
+        <div class="flex items-center gap-2 text-lg">
+            <span>صفحة</span>
+            <span id="page-num" class="font-bold">0</span>
+            <span>/</span>
+            <span id="page-count" class="font-bold">0</span>
+        </div>
+        <button id="next-page" class="bg-gray-700 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-lg transition disabled:opacity-50" disabled>التالية</button>
+        <a id="download-btn" href="#" download="book.pdf" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition opacity-50 pointer-events-none">تحميل الكتاب</a>
+    </div>
+
+    <!-- AI Search Bar (Conceptual) -->
+    <div class="bg-white p-4 my-4 mx-auto w-full max-w-4xl rounded-xl shadow-lg">
+        <div class="relative">
+            <input type="text" id="ai-search-input" placeholder="اسأل الذكاء الاصطناعي عن أي شيء في الكتاب..." class="w-full p-4 pl-28 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring-green-500 transition">
+            <button id="ai-search-btn" class="absolute left-2 top-1/2 -translate-y-1/2 ai-search-gradient text-white font-bold py-2 px-5 rounded-lg">بحث ذكي</button>
+        </div>
+        <div id="ai-search-results" class="mt-4 text-right">
+            <!-- AI search results will be displayed here -->
+        </div>
+    </div>
+
+    <!-- PDF Viewer -->
+    <main class="flex-grow overflow-auto p-4 flex justify-center items-start">
+        <div id="loading-message" class="text-center p-10">
+            <p class="text-xl font-semibold">جاري تحميل الكتاب...</p>
+        </div>
+        <canvas id="pdf-render" class="hidden"></canvas>
+    </main>
+
+    <script>
+        // --- Get URL Parameter ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const pdfFileFromUrl = urlParams.get('file');
+
+        // --- Use URL parameter or a default dummy PDF ---
+        const pdfUrl = pdfFileFromUrl || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+
+        // --- DOM Elements ---
+        const loadingMessage = document.getElementById('loading-message');
+        const pdfCanvas = document.getElementById('pdf-render');
+        const pageNumSpan = document.getElementById('page-num');
+        const pageCountSpan = document.getElementById('page-count');
+        const prevPageBtn = document.getElementById('prev-page');
+        const nextPageBtn = document.getElementById('next-page');
+        const downloadBtn = document.getElementById('download-btn');
+
+        // --- PDF.js Setup ---
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
+
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageIsRendering = false;
+        let pageNumIsPending = null;
+        const scale = 1.5;
+
+        // --- Functions ---
+        const renderPage = num => {
+            pageIsRendering = true;
+            pdfDoc.getPage(num).then(page => {
+                const viewport = page.getViewport({ scale });
+                pdfCanvas.height = viewport.height;
+                pdfCanvas.width = viewport.width;
+
+                const renderContext = { canvasContext: pdfCanvas.getContext('2d'), viewport };
+                page.render(renderContext).promise.then(() => {
+                    pageIsRendering = false;
+                    if (pageNumIsPending !== null) {
+                        renderPage(pageNumIsPending);
+                        pageNumIsPending = null;
+                    }
+                });
+                pageNumSpan.textContent = num;
+                // Update button states
+                prevPageBtn.disabled = (num <= 1);
+                nextPageBtn.disabled = (num >= pdfDoc.numPages);
+            });
+        };
+
+        const queueRenderPage = num => {
+            if (pageIsRendering) {
+                pageNumIsPending = num;
+            } else {
+                renderPage(num);
+            }
+        };
+
+        const showPrevPage = () => { if (pageNum > 1) { pageNum--; queueRenderPage(pageNum); } };
+        const showNextPage = () => { if (pageNum < pdfDoc.numPages) { pageNum++; queueRenderPage(pageNum); } };
+
+        // --- Main Execution ---
+        // A better CORS proxy is needed for many web-hosted PDFs.
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        pdfjsLib.getDocument(proxyUrl + pdfUrl).promise.then(pdfDoc_ => {
+            pdfDoc = pdfDoc_;
+            pageCountSpan.textContent = pdfDoc.numPages;
+            loadingMessage.style.display = 'none'; // Hide loading message
+            pdfCanvas.classList.remove('hidden'); // Show canvas
+            
+            // Enable controls
+            downloadBtn.href = pdfUrl;
+            downloadBtn.classList.remove('opacity-50', 'pointer-events-none');
+            
+            renderPage(pageNum);
+        }).catch(err => {
+             loadingMessage.innerHTML = `<p class="text-red-600 font-bold">حدث خطأ أثناء تحميل الكتاب.</p><p class="text-sm text-gray-600 mt-2">قد يكون السبب مشكلة في الوصول للملف (CORS policy). تأكد من أن الرابط صحيح وأن الملف متاح للعامة.</p>`;
+             console.error(`Error loading PDF: ${err}`);
+        });
+
+        // --- Event Listeners ---
+        prevPageBtn.addEventListener('click', showPrevPage);
+        nextPageBtn.addEventListener('click', showNextPage);
+        
+        // --- AI Search conceptual logic (remains the same) ---
+        const aiSearchBtn = document.getElementById('ai-search-btn');
+        const aiSearchInput = document.getElementById('ai-search-input');
+        const aiSearchResults = document.getElementById('ai-search-results');
+
+        aiSearchBtn.addEventListener('click', () => {
+            const query = aiSearchInput.value;
+            if (!query) {
+                aiSearchResults.innerHTML = '<p class="text-red-500">الرجاء إدخال سؤال للبحث.</p>';
+                return;
+            }
+            aiSearchResults.innerHTML = '<p class="text-blue-500">جاري البحث باستخدام الذكاء الاصطناعي...</p>';
+            
+            setTimeout(() => {
+                aiSearchResults.innerHTML = `
+                    <div class="bg-green-50 p-3 rounded-lg border-r-4 border-green-500">
+                        <p class="font-bold">نتيجة البحث عن: "${query}"</p>
+                        <p class="mt-2">وجد الذكاء الاصطناعي معلومات ذات صلة في <span class="font-bold">صفحة 1</span>. المفهوم الأساسي هو...</p>
+                    </div>
+                `;
+            }, 2000);
+        });
+
+    </script>
+</body>
+</html>

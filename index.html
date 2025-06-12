@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة العلوم</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a nice Arabic font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Use the Tajawal font for the entire page */
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f7fee7; /* lime-50 */
+        }
+        /* Gradient background for the whole page */
+        .body-gradient {
+             background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0f9ff 100%);
+        }
+        /* Custom style for the click effect on icons */
+        .icon-btn:active {
+            transform: scale(0.95) translateY(1px);
+            transition: transform 0.1s ease-in-out;
+        }
+        /* Style for the fade-in animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Hiding the sub-content with a smooth transition */
+        .sub-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+        }
+        /* Showing the sub-content */
+        .sub-content.show {
+            max-height: 1000px; /* A large enough value to show all content */
+        }
+    </style>
+</head>
+<body class="body-gradient text-gray-800">
+
+    <!-- Mute/Unmute Button -->
+    <button id="muteBtn" class="icon-btn fixed top-4 left-4 z-50 p-3 bg-white/70 backdrop-blur-sm rounded-full shadow-md text-green-700 hover:bg-white transition-all">
+        <svg id="unmutedIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+        </svg>
+        <svg id="mutedIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hidden">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+        </svg>
+    </button>
+
+    <div class="container mx-auto p-4 md:p-8 text-center">
+        <!-- Header Section -->
+        <header class="mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-500 mb-3">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</h1>
+            <p class="text-xl md:text-2xl text-green-700 mb-8">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ وَسَلِّمْ</p>
+            <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg inline-block max-w-2xl">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">مكتبة العلوم</h2>
+                <p class="text-lg md:text-xl text-gray-600 mt-2">للأستاذ: صبري محمد حمد</p>
+                <p class="text-base md:text-lg text-gray-500">معلم بمدرسة البلاد القديم الإبتدائية الإعدادية للبنين</p>
+            </div>
+        </header>
+
+        <!-- Main Content Section -->
+        <main class="flex flex-col items-center">
+            <section class="w-full max-w-lg mb-8">
+                <button id="ministryContentBtn" class="icon-btn bg-gradient-to-br from-green-500 to-teal-600 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-full flex items-center justify-center h-32">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 ml-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+                    <span class="text-2xl font-bold">محتوى مكتبة العلوم</span>
+                </button>
+            </section>
+
+            <section id="gradeLevelsContainer" class="hidden w-full">
+                <div class="fade-in grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 mt-8">
+                    <!-- Grade Level Cards will be injected here by JavaScript -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-16 text-center border-t-2 border-green-200 pt-8">
+            <div class="text-sm text-gray-600 space-y-3">
+                <p class="font-bold text-base text-gray-700">اعداد وتصميم المكتبة بفضل الله بواسطة: صبري محمد حمد السيد ابراهيم</p>
+                <p class="font-bold text-base text-gray-700">بمساعدة أداة الذكاء الاصطناعي <span class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-500">GEMINI PRO</span></p>
+                <div class="flex justify-center items-center gap-4 flex-wrap">
+                    <span>للتواصل والاستفسار:</span>
+                    <a href="tel:36864227" class="font-bold text-green-700 hover:text-green-500 transition">36864227</a>
+                    <a href="mailto:sabry.m.ibrahim@moe.bh" class="font-bold text-green-700 hover:text-green-500 transition">sabry.m.ibrahim@moe.bh</a>
+                    <a href="mailto:AMIRASABRY80@GMAIL.COM" class="font-bold text-green-700 hover:text-green-500 transition">AMIRASABRY80@GMAIL.COM</a>
+                </div>
+            </div>
+            <div id="dateTime" class="text-lg font-medium text-gray-800 my-4"></div>
+            <p class="text-xl font-bold text-green-800">الحمد لله رب العالمين</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Data Definitions ---
+        const bookLinks = {
+            grade6_term1: "URL_FOR_6TH_GRADE_TERM_1_BOOK.pdf",
+            grade6_term2: "URL_FOR_6TH_GRADE_TERM_2_BOOK.pdf",
+            grade7_term1: "URL_FOR_7TH_GRADE_TERM_1_BOOK.pdf",
+            grade7_term2: "URL_FOR_7TH_GRADE_TERM_2_BOOK.pdf",
+            grade8_term1: "URL_FOR_8TH_GRADE_TERM_1_BOOK.pdf",
+            grade8_term2: "URL_FOR_8TH_GRADE_TERM_2_BOOK.pdf",
+            grade9_term1: "URL_FOR_9TH_GRADE_TERM_1_BOOK.pdf",
+            grade9_term2: "URL_FOR_9TH_GRADE_TERM_2_BOOK.pdf"
+        };
+
+        const grades = [
+            { name: "السادس الابتدائي", key: "grade6", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.004c-.88.064-1.732.19-2.583.382a59.9 59.9 0 0117.74-5.417c.832.124 1.633.29 2.408.482l.07.004" /></svg>`},
+            { name: "الأول الإعدادي", key: "grade7", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM14.25 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM11.25 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6.375 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM6.375 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M4.875 12h14.25" /></svg>`},
+            { name: "الثاني الإعدادي", key: "grade8", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>`},
+            { name: "الثالث الإعدادي", key: "grade9", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125z" /></svg>`}
+        ];
+
+        const subItems = [
+            { name: "الكتاب المدرسي", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>`, type: 'book' },
+            { name: "البور بوينت الخاص بالوزارة", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h4.5a2.25 2.25 0 012.25 2.25v.75" /></svg>`, type: 'link' },
+            { name: "الامتحانات", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" /></svg>`, type: 'link' },
+            { name: "كراسة العلوم", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>`, type: 'link' },
+            { name: "البور بوينت الخاص بصبري", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12V21" /></svg>`, type: 'link' },
+            { name: "الانشطة", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.567L16.5 21.75l-.398-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.398a2.25 2.25 0 001.423-1.423L16.5 15.75l.398 1.183a2.25 2.25 0 001.423 1.423L19.5 18.75l-1.183.398a2.25 2.25 0 00-1.423 1.423z" /></svg>`, type: 'link' },
+            { name: "التحضير الورقي", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9.096A3.375 3.375 0 0018 11.25h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5" /></svg>`, type: 'link' },
+            { name: "دروس مميزة للزيارة", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345h5.364c.518 0 .734.654.372 1.01l-4.36 3.162a.563.563 0 00-.182.643l1.643 4.897a.563.563 0 01-.844.62l-4.708-3.44a.563.563 0 00-.652 0l-4.708 3.44a.563.563 0 01-.844-.62l1.643-4.897a.563.563 0 00-.182-.643L2.484 9.965c-.363-.356-.146-1.01.372-1.01h5.364a.563.563 0 00.475-.345L11.48 3.5z" /></svg>`, type: 'link' },
+            { name: "الكشوف والاعمال", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>`, type: 'link' },
+            { name: "اخرى", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>`, type: 'link' }
+        ];
+        
+        // --- Global State ---
+        let audioCtx;
+        let isMuted = false;
+
+        // --- DOM Elements ---
+        const gradeLevelsContainer = document.getElementById('gradeLevelsContainer').querySelector('.grid');
+        
+        const createSubItemsHTML = (gradeKey, termKey) => {
+            return subItems.map((item) => {
+                let link = '#'; // Default link for non-book items
+                
+                if (item.type === 'book') {
+                    const bookUrlKey = `${gradeKey}_${termKey}`;
+                    const bookUrl = bookLinks[bookUrlKey] || 'DEFAULT_BOOK_URL_NOT_FOUND.pdf'; // Fallback URL
+                    link = `./viewer.html?file=${encodeURIComponent(bookUrl)}`;
+                } else {
+                    // Here you can add logic for other link types if needed
+                }
+                
+                return `
+                <a href="${link}" target="_blank" class="icon-btn flex items-center justify-start text-left w-full bg-white/50 hover:bg-white rounded-lg px-3 py-2 text-sm font-medium transition-all text-green-900 hover:text-green-700 hover:shadow-sm">
+                    ${item.icon}
+                    <span>${item.name}</span>
+                </a>`;
+            }).join('');
+        };
+        
+        const createGradeCards = () => {
+            gradeLevelsContainer.innerHTML = grades.map((grade, index) => {
+                const gradeKey = grade.key;
+                return `
+                <div class="bg-gradient-to-br from-green-600 to-teal-500 text-white p-4 rounded-2xl shadow-lg flex flex-col gap-3 transition-all duration-300">
+                    <div class="flex flex-col items-center">
+                        ${grade.icon}
+                        <span class="text-xl font-bold">${grade.name}</span>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div>
+                            <button data-target="sub-content-${index}-1" class="semester-btn icon-btn w-full bg-white/20 hover:bg-white/30 rounded-lg p-3 text-base font-bold transition-colors">الفصل الأول</button>
+                            <div id="sub-content-${index}-1" class="sub-content mt-3">
+                                <div class="p-3 bg-green-50 rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    ${createSubItemsHTML(gradeKey, 'term1')}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button data-target="sub-content-${index}-2" class="semester-btn icon-btn w-full bg-white/20 hover:bg-white/30 rounded-lg p-3 text-base font-bold transition-colors">الفصل الثاني</button>
+                            <div id="sub-content-${index}-2" class="sub-content mt-3">
+                                <div class="p-3 bg-green-50 rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                     ${createSubItemsHTML(gradeKey, 'term2')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+            addEventListenersToButtons();
+        };
+
+        const playHoverSound = () => {
+            if (isMuted) return;
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.error("Web Audio API is not supported.");
+                    return;
+                }
+            }
+            if (!audioCtx) return;
+
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.2);
+        };
+
+        const updateDateTime = () => {
+            const now = new Date();
+            const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString('ar-BH', optionsDate);
+            const timeString = now.toLocaleTimeString('ar-BH', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+            const dateTimeDiv = document.getElementById('dateTime');
+            if(dateTimeDiv) {
+                dateTimeDiv.textContent = `${dateString} | ${timeString}`;
+            }
+        };
+        
+        const addEventListenersToButtons = () => {
+            document.querySelectorAll('.icon-btn').forEach(b => b.addEventListener('mouseover', playHoverSound));
+            document.querySelectorAll('.semester-btn').forEach(b => {
+                b.addEventListener('click', (e) => {
+                    const targetContainer = document.getElementById(e.currentTarget.dataset.target);
+                    if (targetContainer) {
+                         // Close other open containers within the same grade card
+                        const parentCard = e.currentTarget.closest('.bg-gradient-to-br');
+                        parentCard.querySelectorAll('.sub-content.show').forEach(openContainer => {
+                            if(openContainer.id !== targetContainer.id) {
+                                openContainer.classList.remove('show');
+                            }
+                        });
+                        // Toggle the clicked one
+                        targetContainer.classList.toggle('show');
+                    }
+                });
+            });
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const ministryBtn = document.getElementById('ministryContentBtn');
+            const muteBtn = document.getElementById('muteBtn');
+            const unmutedIcon = document.getElementById('unmutedIcon');
+            const mutedIcon = document.getElementById('mutedIcon');
+
+            createGradeCards();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            ministryBtn.addEventListener('click', () => {
+                document.getElementById('gradeLevelsContainer').classList.toggle('hidden');
+            });
+
+            muteBtn.addEventListener('click', () => {
+                isMuted = !isMuted;
+                unmutedIcon.classList.toggle('hidden', isMuted);
+                mutedIcon.classList.toggle('hidden', !isMuted);
+            });
+        });
+
+    </script>
+</body>
+</html>
