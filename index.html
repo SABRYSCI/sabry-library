@@ -59,7 +59,7 @@
 <body class="body-gradient text-gray-800 min-h-screen">
 
     <!-- AI Result Modal -->
-    <div id="aiResultModal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4">
+    <div id="aiResultModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-auto fade-in flex flex-col" style="max-height: 90vh;">
             <div class="p-4 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
                 <h3 id="aiModalTitle" class="text-xl font-bold text-gray-800">✨ مساعد الذكاء الاصطناعي</h3>
@@ -108,7 +108,7 @@
     </button>
     
     <!-- View Container: Main Library -->
-    <div id="libraryView">
+    <div id="libraryView" class="block">
         <div class="container mx-auto p-4 md:p-8 text-center">
             <header class="mb-12">
                 <h1 class="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-500 mb-3">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</h1>
@@ -218,12 +218,15 @@
 
     const grades = [
         { name: "السادس الابتدائي", key: "grade6", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.004c-.88.064-1.732.19-2.583.382a59.9 59.9 0 0117.74-5.417c.832.124 1.633.29 2.408.482l.07.004" /></svg>`},
-        // Other grades omitted for brevity
+        { name: "الأول الإعدادي", key: "grade7", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM14.25 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM11.25 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6.375 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM6.375 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M4.875 12h14.25" /></svg>`},
+        { name: "الثاني الإعدادي", key: "grade8", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>`},
+        { name: "الثالث الإعدادي", key: "grade9", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125z" /></svg>`}
     ];
 
     const allSubItems = [
         { name: "الكتاب المدرسي", key: "book", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>` },
-        // Other sub-items omitted for brevity
+        { name: "البور بوينت الخاص بالوزارة", key: "ppt_ministry", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h4.5a2.25 2.25 0 012.25 2.25v.75" /></svg>` },
+        { name: "الامتحانات", key: "exams", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" /></svg>` },
     ];
     
     // --- GLOBAL STATE & ELEMENTS ---
@@ -274,6 +277,7 @@
     function showLibrary() {
         readerView.classList.add('hidden');
         libraryView.classList.remove('hidden');
+        libraryView.classList.add('block');
     }
 
     // --- MODAL & LIBRARY LOGIC ---
@@ -289,7 +293,71 @@
     }
 
     function closeChoiceModal() { choiceModal.classList.add('hidden'); }
+    
+    function createSubItemsHTML(gradeKey, termKey) {
+        return allSubItems.map((item) => {
+            let finalLink = '#';
+            let action = '';
+            let isClickable = false;
+            let elementTag = 'a'; 
 
+            if (item.key === 'book') {
+                elementTag = 'button';
+                const pdfLink = fileLinks[`pdf_${gradeKey}_${termKey}`] || '#';
+                const readerKey = fileLinks[`reader_${gradeKey}_${termKey}`] || '#';
+                isClickable = (pdfLink !== '#' || readerKey !== '#');
+                if (isClickable) {
+                    action = `onclick="event.preventDefault(); openChoiceModal('${pdfLink}', '${readerKey}')"`;
+                }
+            } else {
+                finalLink = fileLinks[`${item.key}_${gradeKey}_${termKey}`] || '#';
+                isClickable = finalLink !== '#';
+                if(isClickable) {
+                   action = `href="${finalLink}" target="_blank"`;
+                }
+            }
+            
+            return `
+                <${elementTag} ${action} class="icon-btn flex items-center justify-start text-left w-full bg-white/50 hover:bg-white rounded-lg px-3 py-2 text-sm transition-all text-green-900 hover:text-green-700 hover:shadow-sm ${!isClickable ? 'opacity-50 cursor-not-allowed' : ''}" ${!isClickable ? 'disabled' : ''}>
+                    ${item.icon.replace(/<svg .*?>/, (m) => m.replace(/class=".*?"/, 'class="w-5 h-5 ml-2"'))}
+                    <span class="font-bold">${item.name}</span>
+                </${elementTag}>`;
+        }).join('');
+    };
+
+    function createGradeCards() {
+        const container = document.getElementById('gradeLevelsContainer').querySelector('.grid');
+        container.innerHTML = grades.map((grade, index) => {
+            const gradeKey = grade.key;
+            return `
+            <div class="bg-gradient-to-br from-green-600 to-teal-500 text-white p-4 rounded-2xl shadow-lg flex flex-col gap-3 transition-all duration-300">
+                <div class="flex items-center justify-center mb-2">
+                    ${grade.icon}
+                    <span class="text-xl font-bold mr-3">${grade.name}</span>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <div>
+                        <button data-target="sub-content-${index}-1" class="semester-btn icon-btn w-full bg-white/20 hover:bg-white/30 rounded-lg p-3 text-base font-bold transition-colors">الفصل الأول</button>
+                        <div id="sub-content-${index}-1" class="sub-content mt-3">
+                            <div class="p-3 bg-green-50 rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${createSubItemsHTML(gradeKey, 'term1')}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button data-target="sub-content-${index}-2" class="semester-btn icon-btn w-full bg-white/20 hover:bg-white/30 rounded-lg p-3 text-base font-bold transition-colors">الفصل الثاني</button>
+                        <div id="sub-content-${index}-2" class="sub-content mt-3">
+                             <div class="p-3 bg-green-50 rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                ${createSubItemsHTML(gradeKey, 'term2')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+        addEventListenersToLibraryButtons();
+    };
+    
     // --- AI FEATURE LOGIC ---
     function setAiModalLoading(isLoading) {
         aiLoadingSpinner.classList.toggle('hidden', !isLoading);
@@ -369,9 +437,12 @@
     }
 
     function addAiButtonsToContent() {
+        // Remove existing buttons to prevent duplicates on re-render
+        document.querySelectorAll('.ai-btn-summarize, .ai-btn-questions').forEach(btn => btn.remove());
+        
         document.querySelectorAll('.lesson-title').forEach(title => {
             const button = document.createElement('button');
-            button.className = 'icon-btn bg-teal-500 hover:bg-teal-600 text-white text-xs font-bold py-1 px-3 rounded-full transition whitespace-nowrap';
+            button.className = 'icon-btn ai-btn-summarize bg-teal-500 hover:bg-teal-600 text-white text-xs font-bold py-1 px-3 rounded-full transition whitespace-nowrap';
             button.innerHTML = '✨ لخص لي';
             button.onclick = handleSummarize;
             title.prepend(button);
@@ -379,32 +450,146 @@
 
         document.querySelectorAll('.chapter-container').forEach(chapter => {
             const button = document.createElement('button');
-            button.className = 'icon-btn mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition block mx-auto';
+            button.className = 'icon-btn ai-btn-questions mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition block mx-auto';
             button.innerHTML = '✨ ضع أسئلة على هذا الفصل';
             button.onclick = handleGenerateQuestions;
             chapter.appendChild(button);
         });
     }
 
-    // --- MAIN INITIALIZATION & EVENT LISTENERS ---
-    document.addEventListener('DOMContentLoaded', () => {
-        // Setup functions and existing event listeners...
-        // ... (omitted for brevity, same as previous version)
+    // --- READER SEARCH LOGIC ---
+    function handleReaderSearch() {
+        if (readerOriginalText) {
+            textContainer.innerHTML = readerOriginalText;
+            addAiButtonsToContent(); // Re-add AI buttons after restoring text
+        }
+        resultsList.innerHTML = '';
+        const searchTerm = searchInput.value;
+        if (searchTerm.trim() === '') {
+            searchInfo.textContent = 'الرجاء إدخال كلمة للبحث.';
+            return;
+        }
 
-        // --- New AI Event Listeners ---
-        closeAiModalBtn.addEventListener('click', closeAiModal);
-        closeAiModalBtnBottom.addEventListener('click', closeAiModal);
-        explainBtn.addEventListener('click', handleExplain);
-        explainInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleExplain();
+        const regex = new RegExp(searchTerm, 'gi');
+        let matchCount = 0;
+
+        const newText = readerOriginalText.replace(regex, (match) => {
+            matchCount++;
+            return `<mark id="result-${matchCount}">${match}</mark>`;
         });
         
-        // --- Reader Setup ---
-        document.getElementById('backToLibraryBtn').addEventListener('click', showLibrary);
-        searchBtn.addEventListener('click', () => { /* Search logic from prev version */ });
-        clearBtn.addEventListener('click', () => { /* Clear logic from prev version */ });
+        textContainer.innerHTML = newText;
+        addAiButtonsToContent(); // Re-add AI buttons after highlighting
         
-        // --- Modal Setup ---
+        // Populate results list and add scroll functionality
+        const marks = textContainer.querySelectorAll('mark');
+        marks.forEach((mark, index) => {
+             const link = document.createElement('a');
+            link.href = `#${mark.id}`;
+            link.className = 'block p-1 hover:bg-gray-200 rounded text-right cursor-pointer';
+            link.textContent = `النتيجة ${index + 1}: "${mark.textContent}"`;
+            
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                mark.classList.add('active-highlight');
+                setTimeout(() => mark.classList.remove('active-highlight'), 1500);
+            });
+            resultsList.appendChild(link);
+        });
+
+        searchInfo.textContent = `تم العثور على "${searchTerm}" ${matchCount} مرة.`;
+    };
+
+    function clearReaderSearch() {
+        if (readerOriginalText) {
+            textContainer.innerHTML = readerOriginalText;
+            addAiButtonsToContent();
+        }
+        searchInput.value = '';
+        searchInfo.textContent = '';
+        resultsList.innerHTML = '';
+    }
+
+    // --- UTILITIES & GENERAL INITIALIZATION ---
+    function initAudio() {
+        if (!audioCtx) {
+            try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } 
+            catch (e) { console.error("Web Audio API is not supported."); }
+        }
+    };
+
+    function playHoverSound() {
+        if (!audioCtx) initAudio();
+        if (isMuted || !audioCtx) return;
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.2);
+    };
+
+    function updateDateTime() {
+        const now = new Date();
+        const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateString = now.toLocaleDateString('ar-BH', optionsDate);
+        const timeString = now.toLocaleTimeString('ar-BH', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+        const dateTimeDiv = document.getElementById('dateTime');
+        if(dateTimeDiv) { dateTimeDiv.textContent = `${dateString} | ${timeString}`; }
+    };
+    
+    function addEventListenersToLibraryButtons() {
+        document.querySelectorAll('.icon-btn').forEach(b => {
+            b.addEventListener('mouseover', playHoverSound);
+            b.addEventListener('touchstart', playHoverSound, { passive: true });
+        });
+        document.querySelectorAll('.semester-btn').forEach(b => {
+            b.addEventListener('click', (e) => {
+                const targetContainer = document.getElementById(e.currentTarget.dataset.target);
+                if (targetContainer) {
+                    const parentCard = e.currentTarget.closest('.bg-gradient-to-br');
+                    parentCard.querySelectorAll('.sub-content.show').forEach(openContainer => {
+                        if(openContainer.id !== targetContainer.id) {
+                           openContainer.classList.remove('show');
+                        }
+                    });
+                    targetContainer.classList.toggle('show');
+                }
+            });
+        });
+    };
+    
+    // --- MAIN INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Get Elements ---
+        const ministryBtn = document.getElementById('ministryContentBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        const unmutedIcon = document.getElementById('unmutedIcon');
+        const mutedIcon = document.getElementById('mutedIcon');
+        
+        // --- Initial Page Setup ---
+        createGradeCards();
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // --- Library Event Listeners ---
+        ministryBtn.addEventListener('click', () => {
+            document.getElementById('gradeLevelsContainer').classList.toggle('hidden');
+        });
+
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            unmutedIcon.classList.toggle('hidden', isMuted);
+            mutedIcon.classList.toggle('hidden', !isMuted);
+        });
+        
+        // --- Modal Event Listeners ---
+        closeChoiceModalBtn.addEventListener('click', closeChoiceModal);
         searchBookBtn.addEventListener('click', function() {
             const readerKey = this.dataset.readerKey;
             if (readerKey && readerKey !== '#') {
@@ -412,16 +597,25 @@
                 showReader(readerKey);
             }
         });
-        // ... (rest of the initial setup)
-    });
+        closeAiModalBtn.addEventListener('click', closeAiModal);
+        closeAiModalBtnBottom.addEventListener('click', closeAiModal);
 
-    // Dummy functions for brevity, assume full implementation from previous version exists
-    function createGradeCards() {}
-    function addEventListenersToLibraryButtons() {}
-    function updateDateTime() {}
-    function playHoverSound(){}
-    function initAudio(){}
-    function clearReaderSearch() {}
+        // --- Reader Event Listeners ---
+        document.getElementById('backToLibraryBtn').addEventListener('click', showLibrary);
+        searchBtn.addEventListener('click', handleReaderSearch);
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleReaderSearch();
+        });
+        clearBtn.addEventListener('click', clearReaderSearch); 
+        explainBtn.addEventListener('click', handleExplain);
+        explainInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleExplain();
+        });
+
+        // --- Global Event Listeners ---
+        document.body.addEventListener('click', initAudio, { once: true });
+        document.body.addEventListener('touchstart', initAudio, { once: true });
+    });
     </script>
 </body>
 </html>
