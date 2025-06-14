@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; }
-        mark { background-color: #fef08a; padding: 2px; border-radius: 4px; }
+        mark { background-color: #fef08a; padding: 2px 0; border-radius: 4px; }
         .chapter-title {
             background-color: #059669; /* green-600 */
             color: white;
@@ -30,6 +30,11 @@
             font-size: 1.25rem;
             font-weight: bold;
         }
+        /* Style for the active search result highlight */
+        .active-highlight {
+            background-color: #fdba74; /* orange-300 */
+            transition: background-color 0.2s ease-in-out;
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen">
@@ -43,6 +48,8 @@
                 <button id="clearBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-lg transition">مسح</button>
             </div>
             <div id="search-info" class="text-center mt-2 font-medium text-gray-600"></div>
+            <!-- Container for search results links -->
+            <div id="results-list" class="mt-2 max-h-32 overflow-y-auto text-sm"></div>
         </div>
     </header>
 
@@ -91,59 +98,9 @@
                 وعلى عكس النقل السلبي، فإنَّ الأمر يتطلب أحيانًا أن تنتقل بعض المواد من منطقة التركيز المنخفض إلى منطقة التركيز المرتفع، وعندها يحتاج انتقال المواد عبر الأغشية إلى طاقة ويُسمى هذا الانتقال النقل النشط.
             </p>
 
-            <!-- ======================= الفصل الثاني ======================= -->
-            <div class="chapter-title">الفصل الثاني: الوراثة والصفات</div>
-
-            <div class="lesson-title">الدرس الأول: المادة الوراثية DNA</div>
-             <p class="lesson-content">
-                 (مساحة فارغة لك لوضع نص الدرس الأول من الفصل الثاني)
-            </p>
-
-            <div class="lesson-title">الدرس الثاني: علم الوراثة</div>
-             <p class="lesson-content">
-                 (مساحة فارغة لك لوضع نص الدرس الثاني من الفصل الثاني)
-            </p>
-
-            <!-- ======================= الفصل الثالث ======================= -->
-            <div class="chapter-title">الفصل الثالث: الأنظمة البيئية</div>
-
-             <div class="lesson-title">الدرس الأول: مقدمة في علم البيئة</div>
-             <p class="lesson-content">
-                <!-- الصق نص الدرس الأول هنا -->
-            </p>
-
-            <div class="lesson-title">الدرس الثاني: العلاقات في الأنظمة البيئية</div>
-             <p class="lesson-content">
-                <!-- الصق نص الدرس الثاني هنا -->
-            </p>
-
-            <!-- ======================= الفصل الرابع ======================= -->
-            <div class="chapter-title">الفصل الرابع: موارد الأرض</div>
+            <!-- ======================= باقي الفصول ======================= -->
+            <!-- ... مساحة فارغة لباقي الفصول ... -->
             
-             <div class="lesson-title">الدرس الأول: الطاقة ومصادرها</div>
-             <p class="lesson-content">
-                <!-- الصق نص الدرس الأول هنا -->
-            </p>
-
-            <div class="lesson-title">الدرس الثاني: المحافظة على الموارد</div>
-             <p class="lesson-content">
-                <!-- الصق نص الدرس الثاني هنا -->
-            </p>
-
-
-            <!-- ======================= الفصل الخامس ======================= -->
-            <div class="chapter-title">الفصل الخامس: الفضاء</div>
-
-             <div class="lesson-title">الدرس الأول: الأرض والنظام الشمسي</div>
-             <p class="lesson-content">
-                <!-- الصق نص الدرس الأول هنا -->
-            </p>
-
-            <div class="lesson-title">الدرس الثاني: النجوم والمجرات</div>
-             <p class="lesson-content">
-                <!-- الصق نص الدرس الثاني هنا -->
-            </p>
-
         </div>
     </main>
 
@@ -153,15 +110,20 @@
         const clearBtn = document.getElementById('clearBtn');
         const searchInfo = document.getElementById('search-info');
         const textContainer = document.getElementById('text-container');
+        const resultsList = document.getElementById('results-list');
         
         let originalText = '';
 
         const handleSearch = () => {
-            if (originalText === '') {
-                originalText = textContainer.innerHTML;
-            } else {
+            // Restore original text if a previous search was made
+            if (originalText) {
                 textContainer.innerHTML = originalText;
+            } else {
+                originalText = textContainer.innerHTML;
             }
+
+            // Clear previous results list
+            resultsList.innerHTML = '';
             
             const searchTerm = searchInput.value;
             if (searchTerm.trim() === '') {
@@ -171,9 +133,36 @@
 
             const regex = new RegExp(searchTerm, 'gi');
             let matchCount = 0;
+            
+            // Replace text and create result links simultaneously
             const newText = originalText.replace(regex, (match) => {
                 matchCount++;
-                return `<mark>${match}</mark>`;
+                const resultId = `result-${matchCount}`;
+
+                // Create a link for the results list
+                const link = document.createElement('a');
+                link.href = `#${resultId}`;
+                link.className = 'block p-1 hover:bg-gray-200 rounded text-right';
+                link.textContent = `النتيجة رقم ${matchCount}: ...${match}...`;
+                
+                // Add click event for smooth scrolling
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetElement = document.getElementById(resultId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Add a temporary flash effect
+                        targetElement.classList.add('active-highlight');
+                        setTimeout(() => {
+                            targetElement.classList.remove('active-highlight');
+                        }, 1500);
+                    }
+                });
+                
+                resultsList.appendChild(link);
+
+                // Return the highlighted text with a unique ID
+                return `<mark id="${resultId}">${match}</mark>`;
             });
 
             textContainer.innerHTML = newText;
@@ -181,13 +170,15 @@
         };
         
         const clearSearch = () => {
-             if (originalText !== '') {
+             if (originalText) {
                 textContainer.innerHTML = originalText;
-            }
+             }
             searchInput.value = '';
             searchInfo.textContent = '';
+            resultsList.innerHTML = '';
         }
 
+        // --- Event Listeners ---
         searchBtn.addEventListener('click', handleSearch);
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
