@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         body { font-family: 'Tajawal', sans-serif; }
         .body-gradient { background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0f9ff 100%); }
@@ -20,7 +19,7 @@
         }
         .sub-content { max-height: 0; overflow: hidden; transition: max-height 0.7s ease-in-out; }
         .sub-content.show { max-height: 1200px; }
-        #choiceModal.hidden, #libraryView.hidden, #readerView.hidden, #aiResultModal.hidden { display: none; }
+        #choiceModal.hidden, #libraryView.hidden, #readerView.hidden { display: none; }
         
         /* Reader-specific styles */
         mark { background-color: #fef08a; padding: 2px 0; border-radius: 4px; }
@@ -42,46 +41,14 @@
             border-bottom: 3px solid #6ee7b7; /* green-300 */
             font-size: 1.25rem;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
         .active-highlight {
             background-color: #fdba74; /* orange-300 */
             transition: background-color 0.2s ease-in-out;
         }
-        /* Styles for AI-generated content */
-        #aiResultText ul { list-style-type: disc; margin-right: 1.5rem; }
-        #aiResultText ol { list-style-type: decimal; margin-right: 1.5rem; }
-        #aiResultText strong { color: #059669; }
     </style>
 </head>
 <body class="body-gradient text-gray-800 min-h-screen">
-
-    <!-- AI Result Modal -->
-    <div id="aiResultModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-auto fade-in flex flex-col" style="max-height: 90vh;">
-            <div class="p-4 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
-                <h3 id="aiModalTitle" class="text-xl font-bold text-gray-800">✨ مساعد الذكاء الاصطناعي</h3>
-                <button id="closeAiModalBtn" class="text-gray-500 hover:text-gray-800 text-3xl leading-none">&times;</button>
-            </div>
-            <div id="aiModalContent" class="p-6 overflow-y-auto">
-                <!-- Loading spinner -->
-                <div id="aiLoadingSpinner" class="text-center hidden">
-                     <svg class="animate-spin h-8 w-8 text-green-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <p class="mt-2 text-gray-600">...جاري التفكير، يرجى الانتظار</p>
-                </div>
-                <!-- Result goes here -->
-                <div id="aiResultText" class="prose prose-lg max-w-none text-right leading-relaxed"></div>
-            </div>
-            <div class="p-4 border-t text-left bg-gray-50 rounded-b-2xl">
-                 <button id="closeAiModalBtnBottom" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition">إغلاق</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Choice Modal -->
     <div id="choiceModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4">
@@ -138,7 +105,7 @@
             <footer class="mt-16 text-center border-t-2 border-green-200 pt-8">
                 <div class="text-sm text-gray-600 space-y-3">
                     <p class="font-bold text-base text-gray-700">اعداد وتصميم المكتبة بفضل الله بواسطة: صبري محمد حمد السيد ابراهيم</p>
-                    <p class="font-bold text-base text-gray-700">بمساعدة أداة الذكاء الاصطناعي <span class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-500">GEMINI</span></p>
+                     <p class="font-bold text-base text-gray-700">بمساعدة أداة الذكاء الاصطناعي <span class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-500">GEMINI</span></p>
                     <div class="flex justify-center items-center gap-4 flex-wrap">
                         <span>للتواصل والاستفسار:</span>
                         <a href="tel:36864227" class="font-bold text-green-700 hover:text-green-500 transition">36864227</a>
@@ -168,14 +135,6 @@
                 </div>
                 <div id="search-info" class="text-center mt-2 font-medium text-gray-600"></div>
                 <div id="results-list" class="mt-2 max-h-32 overflow-y-auto text-sm"></div>
-                <!-- AI Tools -->
-                <div class="flex flex-col sm:flex-row gap-2 items-center mt-4 border-t border-gray-200 pt-4">
-                    <input type="text" id="explainInput" placeholder="اكتب مصطلحاً أو سؤالاً لشرحه..." class="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:ring-purple-500 transition">
-                    <button id="explainBtn" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-5 rounded-lg transition flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>
-                        <span>✨ اشرح لي</span>
-                    </button>
-                </div>
             </div>
         </header>
 
@@ -197,21 +156,13 @@
         grade6_term1: {
             title: "كتاب العلوم - الصف السادس (الفصل الأول)",
             content: `
-                <div class="chapter-container">
-                    <div class="chapter-title">الفصل الأول: الخلايا</div>
-                    <div class="lesson-container">
-                        <div class="lesson-title"><span>الدرس الأول: النظرية الخلوية</span></div>
-                        <p class="lesson-content"><b>أنظر وأتساءل:</b> قد تتفاجأ أن هناك شيئًا مشتركا بينك وبين الطلائعيات... كيف يبدو شكل الخلايا؟<br><br><b>كيف اكتُشفت الخلايا؟</b><br>تتكون جميع المخلوقات الحية من خلية أو أكثر. الخلية هي الوحدة البنائية الأساسية...<br><br><b>تطور النظرية الخلوية:</b><br>لاحظ ليفنهوك عام ١٦٦٥ م العديد من المخلوقات الحية بمجهره...<br><br><b>النظرية الخلوية تتضمن ثلاث أفكار رئيسة، هي:</b><br>1. جميع المخلوقات الحية تتكون من خلية أو أكثر.<br>2. الخلية هي الوحدة الأساسية للتركيب، والوظيفة في جميع المخلوقات الحية.<br>3. تنتج الخلايا عن خلايا حية سابقة لها.<br><br><b>كيف تنتظم الخلايا في المخلوقات الحية؟</b><br>تشبه الخلايا إلى حد ما لبنات البناء...<br><br><b>ما المواد التي توجد في جميع المخلوقات الحية؟</b><br>جميع الأشياء من حولنا تتكوَّنُ مِنْ جُسَيْمَاتٍ دقيقة تُسمى الذرات.</p>
-                    </div>
-                    <div class="lesson-container">
-                        <div class="lesson-title"><span>الدرس الثاني: الخلية النباتية والخلية الحيوانية</span></div>
-                        <p class="lesson-content"><b>أنظر وأتساءل:</b> الخلايا هي الوحدات البنائية الأساسية للمخلوقات الحية...<br><br><b>كيف أقارن بين الخلايا النباتية والخلايا الحيوانية؟</b><br>تتكون كل خلية من مجموعة من الأجزاء تعمل معا كوحدة واحدة...</p>
-                    </div>
-                </div>
-                <div class="chapter-container">
-                    <div class="chapter-title">الفصل الثاني: الخلية والوراثة</div>
-                    <!-- Other lessons here -->
-                </div>
+                <div class="chapter-title">الفصل الأول: الخلايا</div>
+                <div class="lesson-title">الدرس الأول: النظرية الخلوية</div>
+                <p class="lesson-content"><b>أنظر وأتساءل:</b> قد تتفاجأ أن هناك شيئًا مشتركا بينك وبين الطلائعيات... كيف يبدو شكل الخلايا؟<br><br><b>كيف اكتُشفت الخلايا؟</b><br>تتكون جميع المخلوقات الحية من خلية أو أكثر. الخلية هي الوحدة البنائية الأساسية...<br><br><b>تطور النظرية الخلوية:</b><br>لاحظ ليفنهوك عام ١٦٦٥ م العديد من المخلوقات الحية بمجهره...<br><br><b>النظرية الخلوية تتضمن ثلاث أفكار رئيسة، هي:</b><br>1. جميع المخلوقات الحية تتكون من خلية أو أكثر.<br>2. الخلية هي الوحدة الأساسية للتركيب، والوظيفة في جميع المخلوقات الحية.<br>3. تنتج الخلايا عن خلايا حية سابقة لها.<br><br><b>كيف تنتظم الخلايا في المخلوقات الحية؟</b><br>تشبه الخلايا إلى حد ما لبنات البناء...<br><br><b>ما المواد التي توجد في جميع المخلوقات الحية؟</b><br>جميع الأشياء من حولنا تتكوَّنُ مِنْ جُسَيْمَاتٍ دقيقة تُسمى الذرات.</p>
+                <div class="lesson-title">الدرس الثاني: الخلية النباتية والخلية الحيوانية</div>
+                <p class="lesson-content"><b>أنظر وأتساءل:</b> الخلايا هي الوحدات البنائية الأساسية للمخلوقات الحية...<br><br><b>كيف أقارن بين الخلايا النباتية والخلايا الحيوانية؟</b><br>تتكون كل خلية من مجموعة من الأجزاء تعمل معا كوحدة واحدة...</p>
+                <div class="chapter-title">الفصل الثاني: الخلية والوراثة</div>
+                <!-- Other lessons here -->
                 `
         }
     };
@@ -247,16 +198,6 @@
     const textContainer = document.getElementById('text-container');
     const resultsList = document.getElementById('results-list');
 
-    // AI Elements
-    const aiResultModal = document.getElementById('aiResultModal');
-    const aiModalTitle = document.getElementById('aiModalTitle');
-    const aiLoadingSpinner = document.getElementById('aiLoadingSpinner');
-    const aiResultText = document.getElementById('aiResultText');
-    const closeAiModalBtn = document.getElementById('closeAiModalBtn');
-    const closeAiModalBtnBottom = document.getElementById('closeAiModalBtnBottom');
-    const explainInput = document.getElementById('explainInput');
-    const explainBtn = document.getElementById('explainBtn');
-    
     // --- VIEW MANAGEMENT ---
     function showReader(readerKey) {
         const book = bookContents[readerKey];
@@ -265,7 +206,6 @@
             textContainer.innerHTML = book.content;
             readerOriginalText = textContainer.innerHTML;
             clearReaderSearch();
-            addAiButtonsToContent();
             libraryView.classList.add('hidden');
             readerView.classList.remove('hidden');
         } else {
@@ -357,111 +297,11 @@
         }).join('');
         addEventListenersToLibraryButtons();
     };
-    
-    // --- AI FEATURE LOGIC ---
-    function setAiModalLoading(isLoading) {
-        aiLoadingSpinner.classList.toggle('hidden', !isLoading);
-        aiResultText.classList.toggle('hidden', isLoading);
-    }
-
-    function showAiModal(title, content = '') {
-        aiModalTitle.textContent = title;
-        aiResultText.innerHTML = content;
-        aiResultModal.classList.remove('hidden');
-        if (content === '') {
-            setAiModalLoading(true);
-        } else {
-            setAiModalLoading(false);
-        }
-    }
-
-    function closeAiModal() { aiResultModal.classList.add('hidden'); }
-
-    async function callGeminiAPI(prompt) {
-        const apiKey = ""; // Per instructions, this is handled by the execution environment.
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-        const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-        
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-            const result = await response.json();
-            if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
-                return result.candidates[0].content.parts[0].text;
-            } else {
-                console.error("Unexpected API response structure:", result);
-                return "لم أتمكن من العثور على إجابة. الرجاء المحاولة مرة أخرى.";
-            }
-        } catch (error) {
-            console.error('Error calling Gemini API:', error);
-            return 'حدث خطأ أثناء الاتصال بالمساعد الذكي. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.';
-        }
-    }
-
-    async function handleSummarize(event) {
-        const lessonContentElement = event.currentTarget.closest('.lesson-container').querySelector('.lesson-content');
-        if (!lessonContentElement) return;
-        const lessonText = lessonContentElement.innerText;
-        const prompt = `لخص النص التالي لطلاب الصف السادس الابتدائي باسلوب بسيط وواضح وفي نقاط:\n\n"${lessonText}"`;
-        showAiModal('✨ ملخص الدرس');
-        const summary = await callGeminiAPI(prompt);
-        aiResultText.innerHTML = marked.parse(summary);
-        setAiModalLoading(false);
-    }
-
-    async function handleGenerateQuestions(event) {
-        const chapterElement = event.currentTarget.closest('.chapter-container');
-        let chapterText = '';
-        chapterElement.querySelectorAll('.lesson-content').forEach(el => chapterText += el.innerText + '\n\n');
-        if (chapterText.trim() === '') return;
-        const prompt = `بناءً على النص التالي، قم بإنشاء 3 أسئلة من نوع الاختيار من متعدد مع الإجابة الصحيحة لطلاب الصف السادس:\n\n"${chapterText}"`;
-        showAiModal('✨ أسئلة للمراجعة');
-        const questions = await callGeminiAPI(prompt);
-        aiResultText.innerHTML = marked.parse(questions);
-        setAiModalLoading(false);
-    }
-
-    async function handleExplain() {
-        const term = explainInput.value.trim();
-        if (term === '') { alert("الرجاء كتابة مصطلح لشرحه."); return; }
-        const prompt = `اشرح المصطلح أو أجب عن السؤال التالي بطريقة مبسطة جداً ومناسبة لطفل في الصف السادس: "${term}"`;
-        showAiModal(`✨ شرح: ${term}`);
-        const explanation = await callGeminiAPI(prompt);
-        aiResultText.innerHTML = marked.parse(explanation);
-        explainInput.value = '';
-        setAiModalLoading(false);
-    }
-
-    function addAiButtonsToContent() {
-        // Remove existing buttons to prevent duplicates on re-render
-        document.querySelectorAll('.ai-btn-summarize, .ai-btn-questions').forEach(btn => btn.remove());
-        
-        document.querySelectorAll('.lesson-title').forEach(title => {
-            const button = document.createElement('button');
-            button.className = 'icon-btn ai-btn-summarize bg-teal-500 hover:bg-teal-600 text-white text-xs font-bold py-1 px-3 rounded-full transition whitespace-nowrap';
-            button.innerHTML = '✨ لخص لي';
-            button.onclick = handleSummarize;
-            title.prepend(button);
-        });
-
-        document.querySelectorAll('.chapter-container').forEach(chapter => {
-            const button = document.createElement('button');
-            button.className = 'icon-btn ai-btn-questions mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition block mx-auto';
-            button.innerHTML = '✨ ضع أسئلة على هذا الفصل';
-            button.onclick = handleGenerateQuestions;
-            chapter.appendChild(button);
-        });
-    }
 
     // --- READER SEARCH LOGIC ---
     function handleReaderSearch() {
         if (readerOriginalText) {
             textContainer.innerHTML = readerOriginalText;
-            addAiButtonsToContent(); // Re-add AI buttons after restoring text
         }
         resultsList.innerHTML = '';
         const searchTerm = searchInput.value;
@@ -479,9 +319,7 @@
         });
         
         textContainer.innerHTML = newText;
-        addAiButtonsToContent(); // Re-add AI buttons after highlighting
         
-        // Populate results list and add scroll functionality
         const marks = textContainer.querySelectorAll('mark');
         marks.forEach((mark, index) => {
              const link = document.createElement('a');
@@ -504,7 +342,6 @@
     function clearReaderSearch() {
         if (readerOriginalText) {
             textContainer.innerHTML = readerOriginalText;
-            addAiButtonsToContent();
         }
         searchInput.value = '';
         searchInfo.textContent = '';
@@ -566,18 +403,15 @@
     
     // --- MAIN INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
-        // --- Get Elements ---
         const ministryBtn = document.getElementById('ministryContentBtn');
         const muteBtn = document.getElementById('muteBtn');
         const unmutedIcon = document.getElementById('unmutedIcon');
         const mutedIcon = document.getElementById('mutedIcon');
         
-        // --- Initial Page Setup ---
         createGradeCards();
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        // --- Library Event Listeners ---
         ministryBtn.addEventListener('click', () => {
             document.getElementById('gradeLevelsContainer').classList.toggle('hidden');
         });
@@ -588,7 +422,6 @@
             mutedIcon.classList.toggle('hidden', !isMuted);
         });
         
-        // --- Modal Event Listeners ---
         closeChoiceModalBtn.addEventListener('click', closeChoiceModal);
         searchBookBtn.addEventListener('click', function() {
             const readerKey = this.dataset.readerKey;
@@ -597,22 +430,14 @@
                 showReader(readerKey);
             }
         });
-        closeAiModalBtn.addEventListener('click', closeAiModal);
-        closeAiModalBtnBottom.addEventListener('click', closeAiModal);
 
-        // --- Reader Event Listeners ---
         document.getElementById('backToLibraryBtn').addEventListener('click', showLibrary);
         searchBtn.addEventListener('click', handleReaderSearch);
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleReaderSearch();
         });
         clearBtn.addEventListener('click', clearReaderSearch); 
-        explainBtn.addEventListener('click', handleExplain);
-        explainInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleExplain();
-        });
 
-        // --- Global Event Listeners ---
         document.body.addEventListener('click', initAudio, { once: true });
         document.body.addEventListener('touchstart', initAudio, { once: true });
     });
