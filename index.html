@@ -19,428 +19,266 @@
         }
         .sub-content { max-height: 0; overflow: hidden; transition: max-height 0.7s ease-in-out; }
         .sub-content.show { max-height: 1200px; }
-        #choiceModal.hidden, #libraryView.hidden, #readerView.hidden { display: none; }
-        
-        /* Reader-specific styles */
-        mark { background-color: #fef08a; padding: 2px 0; border-radius: 4px; }
-        .chapter-title {
-            background-color: #059669; /* green-600 */
-            color: white;
-            padding: 1rem;
-            margin-top: 2rem;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .lesson-title {
-            color: #065f46; /* green-800 */
-            padding-bottom: 0.5rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            border-bottom: 3px solid #6ee7b7; /* green-300 */
-            font-size: 1.25rem;
-            font-weight: bold;
-        }
-        .active-highlight {
-            background-color: #fdba74; /* orange-300 */
-            transition: background-color 0.2s ease-in-out;
-        }
+        #choiceModal.hidden { display: none; }
     </style>
 </head>
-<body class="body-gradient text-gray-800 min-h-screen">
+<body class="body-gradient text-gray-800">
 
     <!-- Choice Modal -->
     <div id="choiceModal" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm text-center p-6 mx-auto fade-in">
              <h3 class="text-xl font-bold text-gray-800 mb-6">خيارات الكتاب المدرسي</h3>
              <div class="space-y-4">
-                 <a id="viewPdfBtn" href="#" target="_blank" class="flex-1 icon-btn flex items-center justify-center text-center bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200">
-                     <svg class="w-6 h-6 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg>
-                     <span>عرض وتحميل (PDF)</span>
-                 </a>
-                 <button id="searchBookBtn" class="flex-1 icon-btn flex items-center justify-center text-center bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-all duration-200 w-full">
-                     <svg class="w-6 h-6 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" /></svg>
-                     <span>القارئ الذكي (بحث)</span>
-                 </button>
+                <a id="viewPdfBtn" href="#" target="_blank" class="flex-1 icon-btn flex items-center justify-center text-center bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200">
+                    <svg class="w-6 h-6 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg>
+                    <span>عرض وتحميل (PDF)</span>
+                </a>
+                <a id="searchBookBtn" href="#" target="_blank" class="flex-1 icon-btn flex items-center justify-center text-center bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-all duration-200">
+                    <svg class="w-6 h-6 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" /></svg>
+                    <span>القارئ الذكي (بحث)</span>
+                </a>
              </div>
              <button id="closeChoiceModalBtn" class="mt-8 text-gray-500 hover:text-gray-800 font-semibold transition-colors">إغلاق</button>
         </div>
     </div>
 
-    <!-- Mute Button -->
     <button id="muteBtn" class="icon-btn fixed top-4 left-4 z-50 p-3 bg-white/70 backdrop-blur-sm rounded-full shadow-md text-green-700 hover:bg-white transition-all">
         <svg id="unmutedIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" /></svg>
         <svg id="mutedIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" /></svg>
     </button>
-    
-    <!-- View Container: Main Library -->
-    <div id="libraryView" class="block">
-        <div class="container mx-auto p-4 md:p-8 text-center">
-            <header class="mb-12">
-                <h1 class="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-500 mb-3">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</h1>
-                <p class="text-xl md:text-2xl text-green-700 mb-8">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ وَسَلِّمْ</p>
-                <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg inline-block max-w-2xl">
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900">مكتبة العلوم</h2>
-                    <p class="text-lg md:text-xl text-gray-600 mt-2">للأستاذ: صبري محمد حمد</p>
-                    <p class="text-base md:text-lg text-gray-500">معلم بمدرسة البلاد القديم الإبتدائية الإعدادية للبنين</p>
-                </div>
-            </header>
 
-            <main class="flex flex-col items-center">
-                <section class="w-full max-w-lg mb-8">
-                    <button id="ministryContentBtn" class="icon-btn bg-gradient-to-br from-green-500 to-teal-600 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-full flex items-center justify-center h-32">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 ml-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
-                        <span class="text-2xl font-bold">محتوى مكتبة العلوم</span>
-                    </button>
-                </section>
-
-                <section id="gradeLevelsContainer" class="hidden w-full">
-                    <div class="fade-in grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 mt-8">
-                        <!-- Grade cards will be injected here by JavaScript -->
-                    </div>
-                </section>
-            </main>
-            
-            <footer class="mt-16 text-center border-t-2 border-green-200 pt-8">
-                <div class="text-sm text-gray-600 space-y-3">
-                    <p class="font-bold text-base text-gray-700">اعداد وتصميم المكتبة بفضل الله بواسطة: صبري محمد حمد السيد ابراهيم</p>
-                     <p class="font-bold text-base text-gray-700">بمساعدة أداة الذكاء الاصطناعي <span class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-500">GEMINI</span></p>
-                    <div class="flex justify-center items-center gap-4 flex-wrap">
-                        <span>للتواصل والاستفسار:</span>
-                        <a href="tel:36864227" class="font-bold text-green-700 hover:text-green-500 transition">36864227</a>
-                        <a href="mailto:sabry.m.ibrahim@moe.bh" class="font-bold text-green-700 hover:text-green-500 transition">sabry.m.ibrahim@moe.bh</a>
-                        <a href="mailto:AMIRASABRY80@GMAIL.COM" class="font-bold text-green-700 hover:text-green-500 transition">AMIRASABRY80@GMAIL.COM</a>
-                    </div>
-                </div>
-                <div id="dateTime" class="text-lg font-medium text-gray-800 my-4"></div>
-                <p class="text-xl font-bold text-green-800">الحمد لله رب العالمين</p>
-            </footer>
-        </div>
-    </div>
-
-    <!-- View Container: Book Reader -->
-    <div id="readerView" class="hidden h-screen flex flex-col">
-        <header class="bg-white shadow-md p-4 sticky top-0 z-10">
-            <div class="container mx-auto">
-                <h1 id="readerTitle" class="text-2xl font-bold text-gray-800 text-center mb-4"></h1>
-                <!-- Search bar -->
-                <div class="flex flex-col sm:flex-row gap-2 items-center">
-                    <input type="text" id="searchInput" placeholder="ابحث عن كلمة..." class="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring-green-500 transition">
-                    <div class="flex gap-2 w-full sm:w-auto">
-                        <button id="searchBtn" class="flex-grow sm:flex-grow-0 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-5 rounded-lg transition">بحث</button>
-                        <button id="clearBtn" class="flex-grow sm:flex-grow-0 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-5 rounded-lg transition">مسح</button>
-                        <button id="backToLibraryBtn" class="flex-grow sm:flex-grow-0 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-5 rounded-lg transition">عودة</button>
-                    </div>
-                </div>
-                <div id="search-info" class="text-center mt-2 font-medium text-gray-600"></div>
-                <div id="results-list" class="mt-2 max-h-32 overflow-y-auto text-sm"></div>
+    <div class="container mx-auto p-4 md:p-8 text-center">
+        <header class="mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-teal-500 mb-3">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</h1>
+            <p class="text-xl md:text-2xl text-green-700 mb-8">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ وَسَلِّمْ</p>
+            <div class="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg inline-block max-w-2xl">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">مكتبة العلوم</h2>
+                <p class="text-lg md:text-xl text-gray-600 mt-2">للأستاذ: صبري محمد حمد</p>
+                <p class="text-base md:text-lg text-gray-500">معلم بمدرسة البلاد القديم الإبتدائية الإعدادية للبنين</p>
             </div>
         </header>
 
-        <main id="content-area" class="flex-grow overflow-auto p-4 md:p-8">
-            <div id="text-container" class="bg-white p-6 md:p-8 rounded-lg shadow-sm text-lg leading-relaxed text-right">
-                <!-- Book content will be injected here by JavaScript -->
-            </div>
+        <main class="flex flex-col items-center">
+            <section class="w-full max-w-lg mb-8">
+                <button id="ministryContentBtn" class="icon-btn bg-gradient-to-br from-green-500 to-teal-600 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-full flex items-center justify-center h-32">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 ml-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+                    <span class="text-2xl font-bold">محتوى مكتبة العلوم</span>
+                </button>
+            </section>
+
+            <section id="gradeLevelsContainer" class="hidden w-full">
+                <div class="fade-in grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 mt-8">
+                </div>
+            </section>
         </main>
+        
+        <footer class="mt-16 text-center border-t-2 border-green-200 pt-8">
+            <div class="text-sm text-gray-600 space-y-3">
+                <p class="font-bold text-base text-gray-700">اعداد وتصميم المكتبة بفضل الله بواسطة: صبري محمد حمد السيد ابراهيم</p>
+                <p class="font-bold text-base text-gray-700">بمساعدة أداة الذكاء الاصطناعي <span class="font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-blue-500">GEMINI PRO</span></p>
+                <div class="flex justify-center items-center gap-4 flex-wrap">
+                    <span>للتواصل والاستفسار:</span>
+                    <a href="tel:36864227" class="font-bold text-green-700 hover:text-green-500 transition">36864227</a>
+                    <a href="mailto:sabry.m.ibrahim@moe.bh" class="font-bold text-green-700 hover:text-green-500 transition">sabry.m.ibrahim@moe.bh</a>
+                    <a href="mailto:AMIRASABRY80@GMAIL.COM" class="font-bold text-green-700 hover:text-green-500 transition">AMIRASABRY80@GMAIL.COM</a>
+                </div>
+            </div>
+            <div id="dateTime" class="text-lg font-medium text-gray-800 my-4"></div>
+            <p class="text-xl font-bold text-green-800">الحمد لله رب العالمين</p>
+        </footer>
     </div>
 
     <script>
-    // --- DATA ---
-    const fileLinks = {
-        pdf_grade6_term1: "https://moebh-my.sharepoint.com/:b:/g/personal/781251907_moe_bh/EXkeSgmMUfhAn2nCGk3Ht1EB97LiLUG9ZFcS8zatQUCnFw?e=yOi76w",
-        reader_grade6_term1: "grade6_term1", 
-    };
+        const fileLinks = {
+            pdf_grade6_term1: "https://moebh-my.sharepoint.com/:b:/g/personal/781251907_moe_bh/EXkeSgmMUfhAn2nCGk3Ht1EB97LiLUG9ZFcS8zatQUCnFw?e=yOi76w",
+            reader_grade6_term1: "./book_reader_grade6_term1.html",
+        };
+        
+        const grades = [
+            { name: "السادس الابتدائي", key: "grade6", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.004c-.88.064-1.732.19-2.583.382a59.9 59.9 0 0117.74-5.417c.832.124 1.633.29 2.408.482l.07.004" /></svg>`},
+            { name: "الأول الإعدادي", key: "grade7", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM14.25 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM11.25 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6.375 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM6.375 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M4.875 12h14.25" /></svg>`},
+            { name: "الثاني الإعدادي", key: "grade8", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>`},
+            { name: "الثالث الإعدادي", key: "grade9", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125z" /></svg>`}
+        ];
 
-    const bookContents = {
-        grade6_term1: {
-            title: "كتاب العلوم - الصف السادس (الفصل الأول)",
-            content: `
-                <div class="chapter-title">الفصل الأول: الخلايا</div>
-                <div class="lesson-title">الدرس الأول: النظرية الخلوية</div>
-                <p class="lesson-content"><b>أنظر وأتساءل:</b> قد تتفاجأ أن هناك شيئًا مشتركا بينك وبين الطلائعيات... كيف يبدو شكل الخلايا؟<br><br><b>كيف اكتُشفت الخلايا؟</b><br>تتكون جميع المخلوقات الحية من خلية أو أكثر. الخلية هي الوحدة البنائية الأساسية...<br><br><b>تطور النظرية الخلوية:</b><br>لاحظ ليفنهوك عام ١٦٦٥ م العديد من المخلوقات الحية بمجهره...<br><br><b>النظرية الخلوية تتضمن ثلاث أفكار رئيسة، هي:</b><br>1. جميع المخلوقات الحية تتكون من خلية أو أكثر.<br>2. الخلية هي الوحدة الأساسية للتركيب، والوظيفة في جميع المخلوقات الحية.<br>3. تنتج الخلايا عن خلايا حية سابقة لها.<br><br><b>كيف تنتظم الخلايا في المخلوقات الحية؟</b><br>تشبه الخلايا إلى حد ما لبنات البناء...<br><br><b>ما المواد التي توجد في جميع المخلوقات الحية؟</b><br>جميع الأشياء من حولنا تتكوَّنُ مِنْ جُسَيْمَاتٍ دقيقة تُسمى الذرات.</p>
-                <div class="lesson-title">الدرس الثاني: الخلية النباتية والخلية الحيوانية</div>
-                <p class="lesson-content"><b>أنظر وأتساءل:</b> الخلايا هي الوحدات البنائية الأساسية للمخلوقات الحية...<br><br><b>كيف أقارن بين الخلايا النباتية والخلايا الحيوانية؟</b><br>تتكون كل خلية من مجموعة من الأجزاء تعمل معا كوحدة واحدة...</p>
-                <div class="chapter-title">الفصل الثاني: الخلية والوراثة</div>
-                <!-- Other lessons here -->
-                `
-        }
-    };
+        const allSubItems = [
+            { name: "الكتاب المدرسي", key: "book", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>` },
+            { name: "البور بوينت الخاص بالوزارة", key: "ppt_ministry", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h4.5a2.25 2.25 0 012.25 2.25v.75" /></svg>` },
+            { name: "الامتحانات", key: "exams", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" /></svg>` },
+            { name: "كراسة العلوم", key: "notebook", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>` },
+            { name: "البور بوينت الخاص بصبري", key: "ppt_sabry", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12V21" /></svg>` },
+            { name: "الانشطة", key: "activities", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.567L16.5 21.75l-.398-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.398a2.25 2.25 0 001.423-1.423L16.5 15.75l.398 1.183a2.25 2.25 0 001.423 1.423L19.5 18.75l-1.183.398a2.25 2.25 0 00-1.423 1.423z" /></svg>` },
+            { name: "التحضير الورقي", key: "preparation", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9.096A3.375 3.375 0 0018 11.25h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5" /></svg>` },
+            { name: "دروس مميزة للزيارة", key: "lessons", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345h5.364c.518 0 .734.654.372 1.01l-4.36 3.162a.563.563 0 00-.182.643l1.643 4.897a.563.563 0 01-.844.62l-4.708-3.44a.563.563 0 00-.652 0l-4.708 3.44a.563.563 0 01-.844-.62l1.643-4.897a.563.563 0 00-.182-.643L2.484 9.965c-.363-.356-.146-1.01.372-1.01h5.364a.563.563 0 00.475-.345L11.48 3.5z" /></svg>` },
+            { name: "الكشوف والاعمال", key: "sheets", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>` },
+            { name: "اخرى", key: "other", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>` }
+        ];
+        
+        let audioCtx;
+        let isMuted = false;
 
-    const grades = [
-        { name: "السادس الابتدائي", key: "grade6", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.004c-.88.064-1.732.19-2.583.382a59.9 59.9 0 0117.74-5.417c.832.124 1.633.29 2.408.482l.07.004" /></svg>`},
-        { name: "الأول الإعدادي", key: "grade7", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM14.25 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM11.25 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6.375 6.087c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187zM6.375 18c0-.66.54-1.187 1.207-1.187h.01a1.207 1.207 0 011.207 1.187c0 .66-.54 1.187-1.207 1.187h-.01a1.207 1.207 0 01-1.207-1.187z" /><path stroke-linecap="round" stroke-linejoin="round" d="M4.875 12h14.25" /></svg>`},
-        { name: "الثاني الإعدادي", key: "grade8", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>`},
-        { name: "الثالث الإعدادي", key: "grade9", icon: `<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125z" /></svg>`}
-    ];
-
-    const allSubItems = [
-        { name: "الكتاب المدرسي", key: "book", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>` },
-        { name: "البور بوينت الخاص بالوزارة", key: "ppt_ministry", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h4.5a2.25 2.25 0 012.25 2.25v.75" /></svg>` },
-        { name: "الامتحانات", key: "exams", icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" /></svg>` },
-    ];
-    
-    // --- GLOBAL STATE & ELEMENTS ---
-    let audioCtx;
-    let isMuted = false;
-    let readerOriginalText = '';
-
-    const libraryView = document.getElementById('libraryView');
-    const readerView = document.getElementById('readerView');
-    const choiceModal = document.getElementById('choiceModal');
-    const viewPdfBtn = document.getElementById('viewPdfBtn');
-    const searchBookBtn = document.getElementById('searchBookBtn');
-    const closeChoiceModalBtn = document.getElementById('closeChoiceModalBtn');
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const searchInfo = document.getElementById('search-info');
-    const textContainer = document.getElementById('text-container');
-    const resultsList = document.getElementById('results-list');
-
-    // --- VIEW MANAGEMENT ---
-    function showReader(readerKey) {
-        const book = bookContents[readerKey];
-        if (book) {
-            document.getElementById('readerTitle').textContent = book.title;
-            textContainer.innerHTML = book.content;
-            readerOriginalText = textContainer.innerHTML;
-            clearReaderSearch();
-            libraryView.classList.add('hidden');
-            readerView.classList.remove('hidden');
-        } else {
-            console.error("Book content not found for key:", readerKey);
-            alert('عذراً، محتوى هذا الكتاب غير متوفر حالياً.');
-        }
-    }
-
-    function showLibrary() {
-        readerView.classList.add('hidden');
-        libraryView.classList.remove('hidden');
-        libraryView.classList.add('block');
-    }
-
-    // --- MODAL & LIBRARY LOGIC ---
-    function openChoiceModal(pdfLink, readerKey) {
-        viewPdfBtn.href = pdfLink;
-        searchBookBtn.dataset.readerKey = readerKey;
-        viewPdfBtn.classList.toggle('opacity-50', pdfLink === '#');
-        viewPdfBtn.classList.toggle('cursor-not-allowed', pdfLink === '#');
-        searchBookBtn.classList.toggle('opacity-50', readerKey === '#');
-        searchBookBtn.classList.toggle('cursor-not-allowed', readerKey === '#');
-        searchBookBtn.disabled = (readerKey === '#');
-        choiceModal.classList.remove('hidden');
-    }
-
-    function closeChoiceModal() { choiceModal.classList.add('hidden'); }
-    
-    function createSubItemsHTML(gradeKey, termKey) {
-        return allSubItems.map((item) => {
-            let finalLink = '#';
-            let action = '';
-            let isClickable = false;
-            let elementTag = 'a'; 
-
-            if (item.key === 'book') {
-                elementTag = 'button';
-                const pdfLink = fileLinks[`pdf_${gradeKey}_${termKey}`] || '#';
-                const readerKey = fileLinks[`reader_${gradeKey}_${termKey}`] || '#';
-                isClickable = (pdfLink !== '#' || readerKey !== '#');
-                if (isClickable) {
-                    action = `onclick="event.preventDefault(); openChoiceModal('${pdfLink}', '${readerKey}')"`;
-                }
-            } else {
-                finalLink = fileLinks[`${item.key}_${gradeKey}_${termKey}`] || '#';
-                isClickable = finalLink !== '#';
-                if(isClickable) {
-                   action = `href="${finalLink}" target="_blank"`;
-                }
-            }
+        const gradeLevelsContainer = document.getElementById('gradeLevelsContainer').querySelector('.grid');
+        const choiceModal = document.getElementById('choiceModal');
+        const viewPdfBtn = document.getElementById('viewPdfBtn');
+        const searchBookBtn = document.getElementById('searchBookBtn');
+        const closeChoiceModalBtn = document.getElementById('closeChoiceModalBtn');
+        
+        function openChoiceModal(pdfLink, readerLink) {
+            viewPdfBtn.href = pdfLink;
+            searchBookBtn.href = readerLink;
             
-            return `
-                <${elementTag} ${action} class="icon-btn flex items-center justify-start text-left w-full bg-white/50 hover:bg-white rounded-lg px-3 py-2 text-sm transition-all text-green-900 hover:text-green-700 hover:shadow-sm ${!isClickable ? 'opacity-50 cursor-not-allowed' : ''}" ${!isClickable ? 'disabled' : ''}>
-                    ${item.icon.replace(/<svg .*?>/, (m) => m.replace(/class=".*?"/, 'class="w-5 h-5 ml-2"'))}
-                    <span class="font-bold">${item.name}</span>
-                </${elementTag}>`;
-        }).join('');
-    };
+            if(pdfLink === '#') viewPdfBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            else viewPdfBtn.classList.remove('opacity-50', 'cursor-not-allowed');
 
-    function createGradeCards() {
-        const container = document.getElementById('gradeLevelsContainer').querySelector('.grid');
-        container.innerHTML = grades.map((grade, index) => {
-            const gradeKey = grade.key;
-            return `
-            <div class="bg-gradient-to-br from-green-600 to-teal-500 text-white p-4 rounded-2xl shadow-lg flex flex-col gap-3 transition-all duration-300">
-                <div class="flex items-center justify-center mb-2">
-                    ${grade.icon}
-                    <span class="text-xl font-bold mr-3">${grade.name}</span>
-                </div>
-                <div class="flex flex-col gap-3">
-                    <div>
-                        <button data-target="sub-content-${index}-1" class="semester-btn icon-btn w-full bg-white/20 hover:bg-white/30 rounded-lg p-3 text-base font-bold transition-colors">الفصل الأول</button>
-                        <div id="sub-content-${index}-1" class="sub-content mt-3">
-                            <div class="p-3 bg-green-50 rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                ${createSubItemsHTML(gradeKey, 'term1')}
+            if(readerLink === '#') searchBookBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            else searchBookBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            choiceModal.classList.remove('hidden');
+        }
+
+        function closeChoiceModal() {
+            choiceModal.classList.add('hidden');
+        }
+
+        const createSubItemsHTML = (gradeKey, termKey) => {
+            return allSubItems.map((item) => {
+                let finalLink = '#';
+                let action = '';
+
+                if (item.key === 'book') {
+                    const pdfLink = fileLinks[`pdf_${gradeKey}_${termKey}`] || '#';
+                    const readerLink = fileLinks[`reader_${gradeKey}_${termKey}`] || '#';
+                    if (pdfLink !== '#' || readerLink !== '#') {
+                        action = `onclick="event.preventDefault(); openChoiceModal('${pdfLink}', '${readerLink}')"`;
+                    }
+                } else {
+                    finalLink = fileLinks[`${item.key}_${gradeKey}_${termKey}`] || '#';
+                    action = `target="_blank"`;
+                }
+
+                const isClickable = finalLink !== '#' || (item.key === 'book' && (fileLinks[`pdf_${gradeKey}_${termKey}`] || fileLinks[`reader_${gradeKey}_${termKey}`]));
+                const elementTag = item.key === 'book' ? 'button' : 'a';
+
+                return `
+                    <${elementTag} href="${finalLink}" ${action} class="icon-btn flex items-center justify-start text-left w-full bg-white/50 hover:bg-white rounded-lg px-3 py-2 text-sm transition-all text-green-900 hover:text-green-700 hover:shadow-sm ${!isClickable ? 'opacity-50 cursor-not-allowed' : ''}">
+                        ${item.icon.replace(/<svg .*?>/, (m) => m.replace(/class=".*?"/, 'class="w-5 h-5 ml-2"'))}
+                        <span class="font-bold">${item.name}</span>
+                    </${elementTag}>
+                `;
+            }).join('');
+        };
+        
+        const createGradeCards = () => {
+            gradeLevelsContainer.innerHTML = grades.map((grade, index) => {
+                const gradeKey = grade.key;
+                return `
+                <div class="bg-gradient-to-br from-green-600 to-teal-500 text-white p-4 rounded-2xl shadow-lg flex flex-col gap-3 transition-all duration-300">
+                    <div class="flex items-center justify-center mb-2">
+                        ${grade.icon}
+                        <span class="text-xl font-bold mr-3">${grade.name}</span>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div>
+                            <button data-target="sub-content-${index}-1" class="semester-btn icon-btn w-full bg-white/20 hover:bg-white/30 rounded-lg p-3 text-base font-bold transition-colors">الفصل الأول</button>
+                            <div id="sub-content-${index}-1" class="sub-content mt-3">
+                                <div class="p-3 bg-green-50 rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    ${createSubItemsHTML(gradeKey, 'term1')}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <button data-target="sub-content-${index}-2" class="semester-btn icon-btn w-full bg-white/20 hover:bg-white/30 rounded-lg p-3 text-base font-bold transition-colors">الفصل الثاني</button>
-                        <div id="sub-content-${index}-2" class="sub-content mt-3">
-                             <div class="p-3 bg-green-50 rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                ${createSubItemsHTML(gradeKey, 'term2')}
+                        <div>
+                            <button data-target="sub-content-${index}-2" class="semester-btn icon-btn w-full bg-white/20 hover:bg-white/30 rounded-lg p-3 text-base font-bold transition-colors">الفصل الثاني</button>
+                            <div id="sub-content-${index}-2" class="sub-content mt-3">
+                                <div class="p-3 bg-green-50 rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                     ${createSubItemsHTML(gradeKey, 'term2')}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>`;
-        }).join('');
-        addEventListenersToLibraryButtons();
-    };
+            `}).join('');
+            addEventListenersToButtons();
+        };
 
-    // --- READER SEARCH LOGIC ---
-    function handleReaderSearch() {
-        if (readerOriginalText) {
-            textContainer.innerHTML = readerOriginalText;
-        }
-        resultsList.innerHTML = '';
-        const searchTerm = searchInput.value;
-        if (searchTerm.trim() === '') {
-            searchInfo.textContent = 'الرجاء إدخال كلمة للبحث.';
-            return;
-        }
-
-        const regex = new RegExp(searchTerm, 'gi');
-        let matchCount = 0;
-
-        const newText = readerOriginalText.replace(regex, (match) => {
-            matchCount++;
-            return `<mark id="result-${matchCount}">${match}</mark>`;
-        });
-        
-        textContainer.innerHTML = newText;
-        
-        const marks = textContainer.querySelectorAll('mark');
-        marks.forEach((mark, index) => {
-             const link = document.createElement('a');
-            link.href = `#${mark.id}`;
-            link.className = 'block p-1 hover:bg-gray-200 rounded text-right cursor-pointer';
-            link.textContent = `النتيجة ${index + 1}: "${mark.textContent}"`;
-            
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                mark.classList.add('active-highlight');
-                setTimeout(() => mark.classList.remove('active-highlight'), 1500);
-            });
-            resultsList.appendChild(link);
-        });
-
-        searchInfo.textContent = `تم العثور على "${searchTerm}" ${matchCount} مرة.`;
-    };
-
-    function clearReaderSearch() {
-        if (readerOriginalText) {
-            textContainer.innerHTML = readerOriginalText;
-        }
-        searchInput.value = '';
-        searchInfo.textContent = '';
-        resultsList.innerHTML = '';
-    }
-
-    // --- UTILITIES & GENERAL INITIALIZATION ---
-    function initAudio() {
-        if (!audioCtx) {
-            try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } 
-            catch (e) { console.error("Web Audio API is not supported."); }
-        }
-    };
-
-    function playHoverSound() {
-        if (!audioCtx) initAudio();
-        if (isMuted || !audioCtx) return;
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.2);
-    };
-
-    function updateDateTime() {
-        const now = new Date();
-        const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const dateString = now.toLocaleDateString('ar-BH', optionsDate);
-        const timeString = now.toLocaleTimeString('ar-BH', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
-        const dateTimeDiv = document.getElementById('dateTime');
-        if(dateTimeDiv) { dateTimeDiv.textContent = `${dateString} | ${timeString}`; }
-    };
-    
-    function addEventListenersToLibraryButtons() {
-        document.querySelectorAll('.icon-btn').forEach(b => {
-            b.addEventListener('mouseover', playHoverSound);
-            b.addEventListener('touchstart', playHoverSound, { passive: true });
-        });
-        document.querySelectorAll('.semester-btn').forEach(b => {
-            b.addEventListener('click', (e) => {
-                const targetContainer = document.getElementById(e.currentTarget.dataset.target);
-                if (targetContainer) {
-                    const parentCard = e.currentTarget.closest('.bg-gradient-to-br');
-                    parentCard.querySelectorAll('.sub-content.show').forEach(openContainer => {
-                        if(openContainer.id !== targetContainer.id) {
-                           openContainer.classList.remove('show');
-                        }
-                    });
-                    targetContainer.classList.toggle('show');
-                }
-            });
-        });
-    };
-    
-    // --- MAIN INITIALIZATION ---
-    document.addEventListener('DOMContentLoaded', () => {
-        const ministryBtn = document.getElementById('ministryContentBtn');
-        const muteBtn = document.getElementById('muteBtn');
-        const unmutedIcon = document.getElementById('unmutedIcon');
-        const mutedIcon = document.getElementById('mutedIcon');
-        
-        createGradeCards();
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-
-        ministryBtn.addEventListener('click', () => {
-            document.getElementById('gradeLevelsContainer').classList.toggle('hidden');
-        });
-
-        muteBtn.addEventListener('click', () => {
-            isMuted = !isMuted;
-            unmutedIcon.classList.toggle('hidden', isMuted);
-            mutedIcon.classList.toggle('hidden', !isMuted);
-        });
-        
-        closeChoiceModalBtn.addEventListener('click', closeChoiceModal);
-        searchBookBtn.addEventListener('click', function() {
-            const readerKey = this.dataset.readerKey;
-            if (readerKey && readerKey !== '#') {
-                closeChoiceModal();
-                showReader(readerKey);
+        const initAudio = () => {
+             if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) { console.error("Web Audio API is not supported."); }
             }
+        };
+
+        const playHoverSound = () => {
+            if (!audioCtx) initAudio();
+            if (isMuted || !audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.2);
+        };
+
+        const updateDateTime = () => {
+            const now = new Date();
+            const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString('ar-BH', optionsDate);
+            const timeString = now.toLocaleTimeString('ar-BH', { hour: '2-digit', minute: '2-digit', second:'2-digit' });
+            const dateTimeDiv = document.getElementById('dateTime');
+            if(dateTimeDiv) { dateTimeDiv.textContent = `${dateString} | ${timeString}`; }
+        };
+        
+        const addEventListenersToButtons = () => {
+            document.querySelectorAll('.icon-btn').forEach(b => {
+                b.addEventListener('mouseover', playHoverSound);
+                b.addEventListener('touchstart', playHoverSound, { passive: true });
+            });
+            document.querySelectorAll('.semester-btn').forEach(b => {
+                b.addEventListener('click', (e) => {
+                    const targetContainer = document.getElementById(e.currentTarget.dataset.target);
+                    if (targetContainer) {
+                        const parentCard = e.currentTarget.closest('.bg-gradient-to-br');
+                        parentCard.querySelectorAll('.sub-content.show').forEach(openContainer => {
+                            if(openContainer.id !== targetContainer.id) {
+                                openContainer.classList.remove('show');
+                            }
+                        });
+                        targetContainer.classList.toggle('show');
+                    }
+                });
+            });
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const ministryBtn = document.getElementById('ministryContentBtn');
+            const muteBtn = document.getElementById('muteBtn');
+            const unmutedIcon = document.getElementById('unmutedIcon');
+            const mutedIcon = document.getElementById('mutedIcon');
+
+            document.body.addEventListener('click', initAudio, { once: true });
+            document.body.addEventListener('touchstart', initAudio, { once: true });
+
+            createGradeCards();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            ministryBtn.addEventListener('click', () => {
+                document.getElementById('gradeLevelsContainer').classList.toggle('hidden');
+            });
+
+            muteBtn.addEventListener('click', () => {
+                isMuted = !isMuted;
+                unmutedIcon.classList.toggle('hidden', isMuted);
+                mutedIcon.classList.toggle('hidden', !isMuted);
+            });
+
+            closeChoiceModalBtn.addEventListener('click', closeChoiceModal);
         });
 
-        document.getElementById('backToLibraryBtn').addEventListener('click', showLibrary);
-        searchBtn.addEventListener('click', handleReaderSearch);
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleReaderSearch();
-        });
-        clearBtn.addEventListener('click', clearReaderSearch); 
-
-        document.body.addEventListener('click', initAudio, { once: true });
-        document.body.addEventListener('touchstart', initAudio, { once: true });
-    });
     </script>
 </body>
 </html>
